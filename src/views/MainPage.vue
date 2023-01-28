@@ -1,5 +1,5 @@
 <template>
-  <ItemList :items="meals">
+  <ItemList :items="meals" @click="addToCart($event)">
     <template #list-item__text="{ list: meal }">
       {{ meal.strMeal }}
       <img :src="meal.strMealThumb" alt="" />
@@ -9,7 +9,7 @@
 
 <script>
 import ItemList from "@/components/ItemList.vue";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "MainPage",
@@ -21,16 +21,18 @@ export default {
       meals: [],
     };
   },
+  computed: {
+    ...mapGetters(["MEALS"]),
+  },
   methods: {
-    ...mapActions(["GET_MEALS_FROM_API"]),
+    ...mapActions(["GET_MEALS_FROM_API", "ADD_TO_CART"]),
+    addToCart(order) {
+      this.ADD_TO_CART(order);
+    },
   },
   created() {
-    this.GET_MEALS_FROM_API().then(
-      () => (this.meals = this.$store.state.meals)
-    );
-    console.log(this.meals);
+    this.GET_MEALS_FROM_API().then(() => (this.meals = this.MEALS));
   },
-  mounted() {},
 };
 </script>
 

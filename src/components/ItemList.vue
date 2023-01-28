@@ -6,16 +6,17 @@
       <slot name="list-item__text" class="list-item__text" :list="item">
         {{ item.strMeal }}
         <input type="checkbox" />~
-        <img :src="item.strMealThumb" alt="" />
+        <img :src="item.strMealThumb" />
       </slot>
-      <button>Заказать !</button>
+      <div>
+        <button @click="addOrder(item)">Заказать !</button>
+      </div>
     </li>
   </ul>
 </template>
 
 <script>
 export default {
-  name: "HelloWorld",
   data() {
     return {
       filter: "",
@@ -27,6 +28,14 @@ export default {
       required: true,
     },
   },
+  emits: {
+    click: null,
+  },
+  methods: {
+    addOrder(order) {
+      this.$emit("click", JSON.parse(JSON.stringify(order)));
+    },
+  },
 };
 </script>
 
@@ -34,8 +43,8 @@ export default {
 <style scoped>
 .list {
   display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
-  display: flex;
   width: 1400px;
   padding-top: 30px;
 }
